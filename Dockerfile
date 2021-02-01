@@ -24,6 +24,7 @@ RUN wget https://storage.googleapis.com/flutter_infra/releases/stable/linux/flut
 RUN tar xf ./flutter_linux_1.22.6-stable.tar.xz
 # install dart
 RUN ./flutter/bin/dart
+ENV PATH="${PATH}:$USER_HOME/tools/flutter/bin"
 RUN flutter precache
 
 # Android SDK
@@ -33,7 +34,7 @@ ENV PATH="${PATH}:$USER_HOME/tools/cmdline-tools/bin"
 RUN echo y | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-29"
 RUN echo y | sdkmanager --sdk_root=$ANDROID_HOME --install "ndk;21.3.6528147"
 
-ENV PATH="${PATH}:$USER_HOME/tools/flutter/bin:$ANDROID_HOME/platform-tools"
+ENV PATH="${PATH}:$ANDROID_HOME/platform-tools"
 RUN flutter doctor
 
 #VSCode Plugins
