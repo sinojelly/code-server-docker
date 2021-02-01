@@ -3,6 +3,7 @@ FROM codercom/code-server:latest
 LABEL maintainer="https://github.com/sinojelly"
 LABEL decription="VSCode code-server with java, c/c++, fluter, dart, android sdk installed"
 
+USER root
 ENV USER_HOME=/home/coder
 ENV ANDROID_HOME=$USER_HOME/tools/android_sdk
 
