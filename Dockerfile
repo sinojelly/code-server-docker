@@ -3,8 +3,11 @@ FROM codercom/code-server:latest
 LABEL maintainer="https://github.com/sinojelly"
 LABEL decription="VSCode code-server with java, c/c++, fluter, dart, android sdk installed"
 
-RUN mkdir -p /work/tools/android_sdk && mkdir /work/code
-WORKDIR /work/tools
+ENV USER_HOME=/home/coder
+ENV ANDROID_HOME=$USER_HOME/tools/android_sdk
+
+RUN mkdir -p $ANDROID_HOME && mkdir $USER_HOME/code
+WORKDIR $USER_HOME/tools
 
 # Install tools, include java, gcc, 
 RUN apt-get update &&\
@@ -25,12 +28,11 @@ RUN flutter precache
 # Android SDK
 RUN wget https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
 RUN unzip commandlinetools-linux-6858069_latest.zip
-ENV PATH="${PATH}:/work/tools/cmdline-tools/bin"
-RUN echo y | sdkmanager --sdk_root=/work/tools/android_sdk "platform-tools" "platforms;android-29"
-RUN echo y | sdkmanager --sdk_root=/work/tools/android_sdk --install "ndk;21.3.6528147"
+ENV PATH="${PATH}:$USER_HOME/tools/cmdline-tools/bin"
+RUN echo y | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-29"
+RUN echo y | sdkmanager --sdk_root=$ANDROID_HOME --install "ndk;21.3.6528147"
 
-ENV ANDROID_HOME=/work/tools/android_sdk
-ENV PATH="${PATH}:/work/tools/flutter/bin:$ANDROID_HOME/platform-tools"
+ENV PATH="${PATH}:$USER_HOME/tools/flutter/bin:$ANDROID_HOME/platform-tools"
 RUN flutter doctor
 
 #VSCode Plugins
@@ -64,7 +66,7 @@ RUN code-server --install-extension rust-lang.rust \
     && code-server --install-extension jebbs.markdown-extended \
     && code-server --install-extension kasik96.swift 
 
-WORKDIR /work/code
+WORKDIR $USER_HOME/code
 
 
 # In data volume: home/coder/.ssh  &&  home/coder/.gitconfig && home/coder/project
