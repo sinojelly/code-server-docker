@@ -21,7 +21,7 @@ RUN python3.7 -m pip install pip && python3.7 -m pip install wheel && python3.7 
 # FLUTTER
 RUN apt-get install xz-utils -y 
 RUN wget https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_1.22.6-stable.tar.xz
-RUN tar xf ../flutter_linux_1.22.6-stable.tar.xz
+RUN tar xf ./flutter_linux_1.22.6-stable.tar.xz
 # install dart
 RUN ./flutter/bin/dart
 RUN flutter precache
